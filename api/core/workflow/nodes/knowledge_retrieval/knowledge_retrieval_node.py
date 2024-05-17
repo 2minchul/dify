@@ -191,7 +191,7 @@ class KnowledgeRetrievalNode(BaseNode):
                                          key=lambda segment: index_node_id_to_position.get(segment.index_node_id,
                                                                                            float('inf')))
 
-                for segment in sorted_segments:
+                for segment in sorted_segments: # type: DocumentSegment
                     dataset = Dataset.query.filter_by(
                         id=segment.dataset_id
                     ).first()
@@ -218,6 +218,7 @@ class KnowledgeRetrievalNode(BaseNode):
                                 'segment_word_count': segment.word_count,
                                 'segment_position': segment.position,
                                 'segment_index_node_hash': segment.index_node_hash,
+                                'create_time': segment.created_at.strftime('%Y-%m-%d %H:%M:%S'),
                             },
                             'title': document.name
                         }
