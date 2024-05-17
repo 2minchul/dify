@@ -1,7 +1,9 @@
 services:
   # API service
   api:
-    image: langgenius/dify-api:0.6.11
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     restart: always
     environment:
       # Startup mode, 'api' starts the API server.
@@ -564,10 +566,10 @@ services:
     image: nginx:latest
     restart: always
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/proxy.conf:/etc/nginx/proxy.conf
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      #- ./nginx/ssl:/etc/ssl
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/proxy.conf:/etc/nginx/proxy.conf
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      #- ./docker/nginx/ssl:/etc/ssl
     depends_on:
       - api
       - web
