@@ -109,7 +109,7 @@ class FeatureService:
             features.model_load_balancing_enabled = billing_info['model_load_balancing_enabled']
 
     @classmethod
-    def _fulfill_params_from_enterprise(cls, features):
+    def _fulfill_params_from_enterprise(cls, features: SystemFeatureModel):
         enterprise_info = EnterpriseService.get_info()
 
         features.sso_enforced_for_signin = enterprise_info['sso_enforced_for_signin']
