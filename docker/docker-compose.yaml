@@ -186,6 +186,8 @@ x-shared-env: &shared-api-worker-env
   INNER_API: ${INNER_API:-false}
   INNER_API_KEY: ${INNER_API_KEY:-}
   ENTERPRISE_ENABLED: ${ENTERPRISE_ENABLED:-false}
+  ENTERPRISE_API_URL: ${ENTERPRISE_API_URL:-}
+  ENTERPRISE_API_SECRET_KEY: ${ENTERPRISE_API_SECRET_KEY:-}
 
 services:
   # API service
