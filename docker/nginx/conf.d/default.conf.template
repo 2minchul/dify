@@ -28,6 +28,11 @@ server {
       proxy_pass http://api:5001;
       include proxy.conf;
     }
+    
+    # '/' 경로에 대해 404 리턴
+    location = / {
+        return 404;
+    }
 
     location / {
       proxy_pass http://web:3000;
