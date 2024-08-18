@@ -23,6 +23,10 @@ from models.dataset import Dataset, Document, DocumentSegment
 from services.dataset_service import DocumentService
 from services.file_service import FileService
 
+# embition imports
+from models.embition import DocumentDirectory
+from sqlalchemy import or_
+
 
 class DocumentAddByTextApi(DatasetApiResource):
     """Resource for documents."""
@@ -323,6 +327,8 @@ class DocumentListApi(DatasetApiResource):
         page = request.args.get('page', default=1, type=int)
         limit = request.args.get('limit', default=20, type=int)
         search = request.args.get('keyword', default=None, type=str)
+        dir_path = request.args.get('dir_path', default=None, type=str)
+
         dataset = db.session.query(Dataset).filter(
             Dataset.tenant_id == tenant_id,
             Dataset.id == dataset_id
@@ -330,8 +336,24 @@ class DocumentListApi(DatasetApiResource):
         if not dataset:
             raise NotFound('Dataset not found.')
 
-        query = Document.query.filter_by(
-            dataset_id=str(dataset_id), tenant_id=tenant_id)
+        query = db.session.query(Document).outerjoin(
+            DocumentDirectory,
+            (Document.dataset_id == DocumentDirectory.dataset_id) & (Document.id == DocumentDirectory.document_id)
+        )
+        query = query.filter(Document.dataset_id == dataset_id, Document.tenant_id == tenant_id)
+
+        if dir_path:
+            if dir_path == '/':
+                query = query.filter(
+                    or_(
+                        DocumentDirectory.id.is_(None),
+                        DocumentDirectory.dir_path == '/'
+                    )
+                )
+            else:
+                query = query.filter(DocumentDirectory.dir_path == dir_path)
+
+        print(list(query))
 
         if search:
             search = f'%{search}%'

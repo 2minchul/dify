@@ -46,6 +46,7 @@ from libs.passport import PassportService
 
 # TODO: Find a way to avoid importing models here
 from models import account, dataset, model, source, task, tool, tools, web
+from models import embition
 from services.account_service import AccountService
 
 # DO NOT REMOVE ABOVE
