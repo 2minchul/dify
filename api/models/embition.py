@@ -10,5 +10,5 @@ class DocumentDirectory(db.Model):
     # initial fields
     id = db.Column(BigInteger, primary_key=True, autoincrement=True)
     dataset_id = db.Column(StringUUID, nullable=False)
-    document_id = db.Column(StringUUID, nullable=False)
+    document_id = db.Column(StringUUID, nullable=True)
     dir_path = db.Column(db.String(512), nullable=False, default='/')
