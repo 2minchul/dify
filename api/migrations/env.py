@@ -48,8 +48,17 @@ def get_metadata():
 def include_object(object, name, type_, reflected, compare_to):
     if type_ == "foreign_key_constraint":
         return False
+
+    if not exclude_embition_tables(object, name, type_, reflected, compare_to):
+        return False
     else:
         return True
+
+
+def exclude_embition_tables(object, name, type_, reflected, compare_to):
+    if type_ == "table" and name.startswith('embition_'):
+        return False
+    return True
 
 
 def run_migrations_offline():
@@ -66,7 +75,8 @@ def run_migrations_offline():
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=get_metadata(), literal_binds=True
+        url=url, target_metadata=get_metadata(), literal_binds=True,
+        include_object=exclude_embition_tables,
     )
 
     with context.begin_transaction():
@@ -110,4 +120,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-
